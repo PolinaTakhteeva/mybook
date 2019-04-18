@@ -1,6 +1,27 @@
 <html>
-<header><title>This is title</title></header>
+<header><title>Mybook</title></header>
 <body>
-Hello world
+<div class="wrapper">
+	<h1>Мои книги:</h1>
+    <div id="books">
+    <table>
+    	<tr>
+    	<th>Название</th>
+    	<th>Авторы</th>
+    	<th>Обложка</th>
+    	</tr>
+        {% for book in books %}
+        	<tr>
+        	<h2>
+        		<th>{{book.name}}</th>
+        		<th>{{book.authors_names}}</th>
+        		<th>{{book.default_cover}}</th>
+        	</h2>
+        	</tr>
+        {% endfor %}
+    </table>
+    </div>
+    <br>
+</div>
 </body>
 </html>
