@@ -15,7 +15,7 @@
         	<h2>
         		<th>{{book.name}}</th>
         		<th>{{book.authors_names}}</th>
-        		<th>{{book.default_cover}}</th>
+        		<th><img src={{book.cover.image.url}}/></th>
         	</h2>
         	</tr>
         {% endfor %}
