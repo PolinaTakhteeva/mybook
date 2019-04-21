@@ -109,4 +109,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 # STATIC_URL = 'https://i2.mybook.io/c/256x426/'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'mybookproject.herokuapp.com']
