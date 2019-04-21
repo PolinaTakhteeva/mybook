@@ -49,17 +49,23 @@ def login(request):
 								data = {
                         			'email': email,
                         			'password': password})
+		print(resp)
+		print(resp.status_code)
 		if resp.status_code == 200:
 			session_cookie = resp.cookies.get_dict()['session']
 			response = redirect('books')
 			response.set_cookie(key='session', value=session_cookie)
 			return response
+		else:
+			form = LoginForm()
+		return render(
+			request, 'login.html',
+			{'form': form, 'message' :'Неверно введены данные для входа.' })
 	else:
 		form = LoginForm()
 		return render(
 			request, 'login.html',
-			{'form': form }
-			)
+			{'form': form })
 
 
 
