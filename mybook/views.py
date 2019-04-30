@@ -2,16 +2,10 @@ from django.shortcuts import render, redirect
 import requests
 
 from mybook.forms import LoginForm
-
-URL_AUTH = "https://mybook.ru/api/auth/"
-URL_BOOK_USER_LIST = "https://mybook.ru/api/bookuserlist/"
-COVER_LINK = 'https://i2.mybook.io/c/256x426/'
-HEADERS = {'Accept': 'application/json; version=5'}
-
+from mybook.constants import URL_AUTH, URL_BOOK_USER_LIST, COVER_LINK, HEADERS
 
 def mybook_login_requared(view_func):
 	def wrapped_view_func(request, *args, **kwargs):
-		print(request.COOKIES.get('session'))
 		if request.COOKIES.get('session') is None:
 			return redirect('login')
 		else:
@@ -24,8 +18,7 @@ def books_list(request):
 	cookies = {'session': request.COOKIES.get('session')}
 	books_list_resp = requests.get(URL_BOOK_USER_LIST,
                      headers=HEADERS, cookies=cookies)
-	print(books_list_resp)
-	books = get_books_resp(books_list_resp)
+	books = get_books_resp(books_list_resp.json())
 	return render(
         request, 'mybook/books.html',
         {'books': books}
@@ -33,7 +26,7 @@ def books_list(request):
 
 def get_books_resp(books_list_resp):
 	books = []
-	for obj in books_list_resp.json()['objects']:
+	for obj in books_list_resp['objects']:
 		book = {k: v for k, v in obj['book'].items() if k in ('name', 'authors_names', 'default_cover')}
 		book['cover'] = COVER_LINK + book['default_cover']
 		books.append(book)
@@ -49,8 +42,7 @@ def login(request):
 								data = {
                         			'email': email,
                         			'password': password})
-		print(resp)
-		print(resp.status_code)
+		
 		if resp.status_code == 200:
 			session_cookie = resp.cookies.get_dict()['session']
 			response = redirect('books')
