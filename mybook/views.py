@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.core.paginator import Paginator
 import requests
 
 from mybook.forms import LoginForm
@@ -18,7 +19,10 @@ def books_list(request):
 	cookies = {'session': request.COOKIES.get('session')}
 	books_list_resp = requests.get(URL_BOOK_USER_LIST,
                      headers=HEADERS, cookies=cookies)
-	books = get_books_resp(books_list_resp.json())
+	books_list = get_books_resp(books_list_resp.json())
+	paginator = Paginator(books_list, 10)
+	page = request.GET.get('page')
+	books = paginator.get_page(page)
 	return render(
         request, 'mybook/books.html',
         {'books': books}
